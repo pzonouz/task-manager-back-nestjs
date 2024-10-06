@@ -4,13 +4,16 @@ import {
   IsNotEmpty,
   IsNumber,
   IsString,
-  IsUUID,
   Max,
-  max,
   MaxLength,
   Min,
   MinLength,
+  ValidateNested,
 } from 'class-validator';
+import { Type } from 'class-transformer';
+import { Category } from '../../categories/entities/category.entity';
+import { Priority } from '../../priorities/entities/priority.entity';
+import { User } from '../../users/entities/user.entity';
 
 export class CreateTaskDto {
   @IsNotEmpty()
@@ -35,17 +38,17 @@ export class CreateTaskDto {
   @Min(0)
   progress_percentage: number;
 
-  @IsUUID()
-  @IsNotEmpty()
-  category_id: number;
+  @Type(() => Category)
+  @ValidateNested({ each: true })
+  category: Category;
 
-  @IsUUID()
-  @IsNotEmpty()
-  priority_id: number;
+  @Type(() => Priority)
+  @ValidateNested({ each: true })
+  priority: Priority;
 
-  @IsUUID()
-  @IsNotEmpty()
-  user_id: number;
+  @Type(() => User)
+  @ValidateNested({ each: true })
+  user: User;
 
   @IsNotEmpty()
   @IsBoolean()

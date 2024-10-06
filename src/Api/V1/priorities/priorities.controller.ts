@@ -1,9 +1,17 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { PrioritiesService } from './priorities.service';
 import { CreatePriorityDto } from './dto/create-priority.dto';
 import { UpdatePriorityDto } from './dto/update-priority.dto';
 
-@Controller('priorities')
+@Controller('/api/v1/priorities')
 export class PrioritiesController {
   constructor(private readonly prioritiesService: PrioritiesService) {}
 
@@ -23,7 +31,10 @@ export class PrioritiesController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePriorityDto: UpdatePriorityDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updatePriorityDto: UpdatePriorityDto,
+  ) {
     return this.prioritiesService.update(+id, updatePriorityDto);
   }
 

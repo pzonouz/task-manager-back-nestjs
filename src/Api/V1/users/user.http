@@ -1,4 +1,4 @@
-@host=http://127.0.0.1:3000/api/v1/categories
+@host=http://127.0.0.1:3000/api/v1/users
 ###
 GET /
 ###
@@ -6,7 +6,7 @@ GET /1
 ###
 POST /
 Content-Type:application/json
-{"name":"Work"}
+{"email":"p.zonouz@gmail.com"}
 ###
 PATCH /1
 Content-Type:application/json
