@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { Repository } from 'typeorm';
@@ -14,7 +18,14 @@ export class CategoriesService {
     @InjectRepository(Category)
     private CategoryRepository: Repository<Category>,
   ) {}
-  create(createCategoryDto: CreateCategoryDto) {
+  async create(createCategoryDto: CreateCategoryDto) {
+    createCategoryDto.name = createCategoryDto.name.toLowerCase().trim();
+    const existing = await this.CategoryRepository.findOne({
+      where: { name: createCategoryDto.name },
+    });
+    if (existing) {
+      throw new BadRequestException('Category with that name already exists');
+    }
     return this.CategoryRepository.save(createCategoryDto);
   }
 

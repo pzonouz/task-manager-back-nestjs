@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreatePriorityDto } from './dto/create-priority.dto';
 import { UpdatePriorityDto } from './dto/update-priority.dto';
 import { Repository } from 'typeorm';
@@ -11,7 +15,14 @@ export class PrioritiesService {
     @InjectRepository(Priority)
     private priorityRepository: Repository<Priority>,
   ) {}
-  create(createPriorityDto: CreatePriorityDto) {
+  async create(createPriorityDto: CreatePriorityDto) {
+    createPriorityDto.name = createPriorityDto.name.toLowerCase().trim();
+    const existing = await this.priorityRepository.findOne({
+      where: { name: createPriorityDto.name },
+    });
+    if (existing) {
+      throw new BadRequestException('Priority with that name already exists');
+    }
     return this.priorityRepository.save(createPriorityDto);
   }
 
